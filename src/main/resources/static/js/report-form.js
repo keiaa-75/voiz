@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createMultiStepForm('reportForm', {
         validateStep: (stepNumber) => {
             validationAlert.classList.add('d-none');
-            // Step 3 is the optional file upload, so we don't validate it
             if (stepNumber === 3) {
                 return true;
             }
@@ -36,11 +35,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if ((field.type === 'checkbox' && !field.checked) || (field.type !== 'checkbox' && !field.value.trim())) {
                     isFieldValid = false;
                 } else if (field.id === 'name') {
-                    // Regex allows letters (including unicode), spaces, hyphens, and apostrophes
                     const nameRegex = /^[\p{L}' -]+$/u;
                     if (!nameRegex.test(field.value)) {
                         isFieldValid = false;
                     }
+                } else if (field.type === 'email') {I
+                    isFieldValid = field.checkValidity();
                 }
 
                 if (!isFieldValid) {
@@ -67,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('review-category').textContent = categorySelect.options[categorySelect.selectedIndex].text;
                 document.getElementById('review-description').textContent = document.getElementById('description').value;
                 
-                // Populate evidence accordion
                 const reviewFiles = document.getElementById('review-files');
                 reviewFiles.innerHTML = ''; // Clear previous entries
                 const files = document.getElementById('files').files;
@@ -97,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (filesInput) {
         const validateFiles = () => {
-            const maxFileSize = 10 * 1024 * 1024; // 10 MB
+            const maxFileSize = 10 * 1024 * 1024;
             fileError.textContent = '';
             nextBtn.disabled = false;
 
@@ -115,9 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
         filesInput.addEventListener('change', validateFiles);
     }
 
-    // Success Modal Logic
     const copyBtn = document.getElementById('copyBtn');
-    if (copyBtn) { // If the copy button exists, the modal has the copy functionality
+    if (copyBtn) {
         const referenceIdInput = document.getElementById('referenceId');
         const copyFeedback = document.getElementById('copy-feedback');
 

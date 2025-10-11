@@ -31,11 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!field.value.trim()) {
                     isFieldValid = false;
                 } else if (field.id === 'name') {
-                    // Regex allows letters (including unicode), spaces, hyphens, and apostrophes
                     const nameRegex = /^[\p{L}' -]+$/u;
                     if (!nameRegex.test(field.value)) {
                         isFieldValid = false;
                     }
+                } else if (field.type === 'email') {
+                    isFieldValid = field.checkValidity();
                 }
 
                 if (!isFieldValid) {

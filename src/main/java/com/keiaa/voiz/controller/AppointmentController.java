@@ -6,9 +6,12 @@
 
 package com.keiaa.voiz.controller;
 
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +41,14 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public String submitAppointment(@ModelAttribute("appointment") Appointment appointment, RedirectAttributes redirectAttributes) {
+    public String submitAppointment(@Valid @ModelAttribute("appointment") Appointment appointment, 
+                                   BindingResult bindingResult, 
+                                   RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", "Please correct the errors in the form");
+            return "redirect:/schedule";
+        }
+        
         appointmentRepository.save(appointment);
         emailService.sendAppointmentConfirmation(appointment);
         redirectAttributes.addFlashAttribute("message", "Your counseling session request has been submitted successfully!");
