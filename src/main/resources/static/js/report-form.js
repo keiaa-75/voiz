@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (!nameRegex.test(field.value)) {
                         isFieldValid = false;
                     }
-                } else if (field.type === 'email') {I
+                } else if (field.type === 'email') {
                     isFieldValid = field.checkValidity();
                 }
 
